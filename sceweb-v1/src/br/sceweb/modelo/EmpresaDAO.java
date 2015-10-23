@@ -2,7 +2,10 @@ package br.sceweb.modelo;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.sceweb.servico.FabricaDeConexoes;
 
@@ -29,8 +32,8 @@ public class EmpresaDAO {
 		}
 		return codigoRetorno;
 	}
-	
-	public int exclui(String cnpj){
+
+	public int exclui(String cnpj) {
 		Connection conn = new FabricaDeConexoes().getConnection();
 		int codigoRetorno = 0;
 		try {
@@ -43,7 +46,30 @@ public class EmpresaDAO {
 			throw new RuntimeException(e);
 		}
 		return codigoRetorno;
-		
+
 	}
 
+	public List<Empresa> consultaEmpresa() {
+		Connection con = new FabricaDeConexoes().getConnection();
+		Empresa empresa = new Empresa();
+		List<Empresa> lista = new ArrayList<Empresa>();
+		String sql = "SELECT * FROM Empresa";
+		try {
+			PreparedStatement ps = con.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				empresa.setCnpj(rs.getString("cnpj"));
+				empresa.setNomeDaEmpresa(rs.getString("nomeDaEmpresa"));
+				empresa.setNomeFantasia(rs.getString("nomeFantasia"));
+				empresa.setEndereco(rs.getString("endereco"));
+				empresa.setTelefone(rs.getString("telefone"));
+				lista.add(empresa);
+			}
+			ps.close();
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return lista;
+	}
 }

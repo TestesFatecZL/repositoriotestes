@@ -38,6 +38,7 @@ public class UC01CadastrarEmpresa {
 		assertEquals(0, empresaDAO.adiciona(empresa));
 		empresaDAO.exclui("89424232000180");
 	}
+	
 	@Test
 	public void CT03UC01A3Cadastra_empresa_cnpj_invalido(){
 		Empresa empresa2 = new Empresa();
